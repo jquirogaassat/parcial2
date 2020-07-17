@@ -36,8 +36,11 @@ i.	imprimir el punto 2 y 3 ordenado descendentemente por total facturado
 
 
 void fsmenu();
-void fscarga(int [],int []);
-void fscant(int []);
+void fscarga(float[],int [],int[],int[]);
+void fscant(int[]);
+void fsventas(int[]);
+void fsfacturado(float[]);
+
 int main() 
 {
 	char usuario [15];
@@ -45,11 +48,12 @@ int main()
 	char user[15];
 	char contra[15];
 	int cont=0, u,p,bandera,opcion;
-	strcpy(usuario,"jair");
-	strcpy(contrasena,"1234");
-	int vecmod[5];
-	int veccant[6];
+	strcpy(usuario,"jair");// 		usuario
+	strcpy(contrasena,"1234");//		password
+	float vecmod[5];
 	int veclug [6];
+	int vetcantidad[6]={0};
+	int vecventas[5]={0};
 	
 	
 	do
@@ -82,41 +86,74 @@ int main()
 		else
 		{
 			printf("Bienvenido, a continuacion se mostrara el menu de opciones \n");
-			fsmenu();
+			system("pause");
+			fsmenu();//					ingreso al menu
 			
 			do
 			{
-				printf("Ingrese la opcion que desea :\n");
+				printf("\tIngrese la opcion que desea :\n");
 				scanf("%d",&opcion);
-			}while( (opcion<0)||(opcion>9));
+			}while( opcion!=0);
+			
+			
 			bandera=0;
-			while(opcion!=9)
+			while(opcion!=4)
 			{
 				switch(opcion)
 				{
 					case 0:
 						if(bandera==0)
 						{
-							printf("Ingrese los datos \n");
-							fscarga(vecmod,veclug);
-							bandera =1;
-						}
-						else
+						fscarga(vecmod,veclug,vetcantidad,vecventas);
+						bandera=1;	
+						}else
 						{
-							printf("Ud ya realizo la carga \n");	
-						}
-					break;
-					
+						printf("No es posible realizar la carga.\n");
+						system("pause");	
+						}						
+					break;					
 					case 1:
 						if(bandera==1)
 						{
-							printf("");
+						fscant(vetcantidad);
+						}else
+						{
+							printf("Para poder acceder a este item, necesita realizar la carga. \n");
+							system("pause");
+						}					
+					break;
+					case 2:
+						if(bandera==1)
+						{
+						fsventas(vecventas);	
+						}else
+						{
+							printf("Para poder acceder a este item, necesita realizar la carga. \n");
+							system("pause");	
+						}						
+					break;
+					case 3:
+						if(bandera==1)
+						{
+						fsfacturado(vecmod);	
+						}else
+						{
+							printf("Para poder acceder a este item, necesita realizar la carga. \n");
+							system("pause");	
 						}
 					break;
 						
 							
 				}
+				fsmenu();
+				printf("Ingrese la opcion que desea :\n");
+				scanf("%d",&opcion);
+				
+				
+				
 			}
+			printf("Ud eligio salir. Hasta pronto!!! Gracias por operar con nosotros.");
+			system("pause");
 			
 		}
 	
@@ -126,49 +163,95 @@ int main()
 void fsmenu()
 {
 	system("cls");
-	printf("Elija la opcion que desee : \n ");
-	printf("0-- Carga de datos \n");
-	printf("1-- Cantidad armada en cada lugar \n");
-	printf("2-- Cantidad vendida de cada modelo \n");
-	printf("3-- Total facturado \n");
-	printf("9-- Salir del programa \n");
+	printf("\t*******Bienvenido al sistema de gestion *******\n");
+	printf("\tElija la opcion que desee : \n ");
+	printf("\t0-- Carga de datos \n");
+	printf("\t1-- Cantidad armada en cada lugar \n");
+	printf("\t2-- Cantidad vendida de cada modelo \n");
+	printf("\t3-- Total facturado \n");
+	printf("\t4-- Salir del programa \n");
 	
 }
 
 
-void fscarga(int vecmod[5],int veclug[6] )
+void fscarga(float vecmod[5],int veclug[6],int vetcantidad[6],int vecventas[5] )
 {
-	int nromodelo,lugarmado;
+	int nromodelo,lugarmado,cant =0;
 	float costo,costof;
-	vecmod[5];
+	
 	int i, bandera=0;
-	while (bandera==0)
-	{
-		printf("Ingrese modelo \n");
+	
+	do{
+		printf("Ingrese modelo, finaliza con n° modelo 0 \n");// pide 1ra vez
 		scanf("%d",&nromodelo);
+	}while(nromodelo>=5);
+	
+	while (nromodelo!=0)
+	{
+		
+		printf("Ingrese cantidad \n");
+		scanf("%d",&cant);
 		printf("Ingrese costo \n");
 		scanf("%f",&costo);
 		vecmod[nromodelo]=vecmod[nromodelo]+costo;
+		
+		do{			
 		printf("Ingrese lugar de armado \n");
-		scanf("%d",&lugarmado);
+		scanf("%d",&lugarmado);		
+		 }while (lugarmado>=6);
+		 
 		printf("Ingrese costo del flete \n");
 		scanf("%f",&costof);
 		veclug[lugarmado]=veclug[lugarmado]+costof;
+		fflush(stdin);
+		vetcantidad [lugarmado]=vetcantidad[lugarmado]+cant;//termina info 1 modelo
+		vecventas[nromodelo]=vecventas[nromodelo]+cant;
+		bandera=1;
 		
-		bandera=1;		
+		do{
+		printf("Ingrese modelo, finaliza con n° modelo 0 \n");// pide 1ra vez
+		scanf("%d",&nromodelo);
+		}while(nromodelo>=5);	
+	//	printf("Ingrese modelo, finaliza con n° modelo 0 \n");
+	//	scanf("%d",&nromodelo);
 	}
 	
 	
 	
 }
 
-void fscant(int veccant[])
+void fscant(int vetcantidad[6])
 {
+	int f;
+	for(f=1;f<=5;f++)
+	{
+		printf(" La cantidad armada en el lugar  %d, es de %d \n ",f,vetcantidad[f]);	 		
+	}
+	
+	system("pause");
 	
 }
 
+void fsventas(int vecventas[5])
+{
+	int f;
+	for(f=1;f<=5;f++)
+	{
+		printf("La cantidad vendida del modelo %d, es de %d \n",f,vecventas[f]);
+	}
+	system("pause");
+}
 
-
+void fsfacturado (float vecmod[5])
+{
+	int f;
+	for(f=1;f<=5;f++)
+	{
+		printf("El total facturado por modelo %d, es de %.2f \n",f,vecmod[f]);	
+		
+	}
+	system("pause");
+}
 
 
 
